@@ -15,6 +15,9 @@ namespace PersonDirectory.API.MappingProfile
             CreateMap<AddPersonPhoneNumberModel, PhoneNumber>();
             CreateMap<UpdatePersonModel, UpdatePersonCommand>();
             CreateMap<DeletePersonModel, DeletePersonCommand>();
+            
+            CreateMap<AddPersonRelationModel, AddPersonRelationCommand>();
+            CreateMap<DeletePersonRelationModel, DeletePersonRelationCommand>();
         }
     }
 }

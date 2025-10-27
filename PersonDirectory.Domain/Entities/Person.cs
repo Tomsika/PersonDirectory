@@ -60,7 +60,8 @@ namespace PersonDirectory.Domain.Entities
             string personalNumber,
             DateTime birthDate,
             int cityId,
-            ICollection<PhoneNumber> phoneNumbers) => new Person(firstName, lastName, gender, personalNumber, birthDate, cityId, phoneNumbers);
+            ICollection<PhoneNumber> phoneNumbers)
+            => new Person(firstName, lastName, gender, personalNumber, birthDate, cityId, phoneNumbers);
 
         public void Update(
             string firstName,
@@ -83,6 +84,18 @@ namespace PersonDirectory.Domain.Entities
         public void Delete()
         {
             Status = PersonStatus.Deleted;
+        }
+
+        public void AddRelation(int relatedPersonId, RelationType relationType)
+        {
+            var relation = PersonRelation.Create(Id, relatedPersonId, relationType);
+
+            Relations.Add(relation);
+        }
+
+        public void DeleteRelation(PersonRelation relation)
+        {
+            Relations.Remove(relation);
         }
     }
 }

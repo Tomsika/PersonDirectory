@@ -24,7 +24,7 @@ namespace PersonDirectory.Infrastructure.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<bool> PersonalNumberExistsAsync(string personalNumber, int? excludePersonId, CancellationToken cancellationToken)
+        public async Task<bool> PersonalNumberExists(string personalNumber, int? excludePersonId, CancellationToken cancellationToken)
         {
             var query = _context.Persons.Where(p => p.PersonalNumber == personalNumber);
 
@@ -32,6 +32,13 @@ namespace PersonDirectory.Infrastructure.Repositories
             {
                 query = query.Where(p => p.Id != excludePersonId.Value);
             }
+
+            return await query.AnyAsync(cancellationToken);
+        }
+
+        public async Task<bool> RelationExists(int personId, int realatedPersonId, CancellationToken cancellationToken)
+        {
+            var query = _context.PersonRelations.Where(p => p.PersonId == personId && p.RelatedPersonId == realatedPersonId);
 
             return await query.AnyAsync(cancellationToken);
         }

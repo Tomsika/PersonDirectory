@@ -42,5 +42,21 @@ namespace PersonDirectory.API.Controllers
             await _mediator.Send(command, cancellationToken);
             return Ok();
         }
+
+        [HttpPost("AddRelation")]
+        public async Task<IActionResult> AddRelation([FromBody] AddPersonRelationModel model, CancellationToken cancellationToken)
+        {
+            var command = _mapper.Map<AddPersonRelationCommand>(model);
+            await _mediator.Send(command, cancellationToken);
+            return Ok();
+        }
+
+        [HttpDelete("deleteRelation")]
+        public async Task<IActionResult> DeleteRelation([FromBody] DeletePersonRelationModel model, CancellationToken cancellationToken)
+        {
+            var command = _mapper.Map<DeletePersonRelationCommand>(model);
+            await _mediator.Send(command, cancellationToken);
+            return Ok();
+        }    
     }
 }

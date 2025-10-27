@@ -32,4 +32,20 @@ namespace PersonDirectory.Application.Commands
     {
         public int Id { get; set; }
     }
+
+    public class AddPersonRelationCommand : IRequest
+    {
+        public int PersonId { get; set; }
+
+        public RelationType RelationType { get; set; }
+
+        public int RelatedPersonId { get; set; }
+    }
+
+    public class DeletePersonRelationCommand : IRequest
+    {
+        public int PersonId { get; set; }
+
+        public int Id { get; set; }
+    }
 }
