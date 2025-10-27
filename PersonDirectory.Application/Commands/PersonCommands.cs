@@ -1,0 +1,35 @@
+﻿using MediatR;
+using PersonDirectory.Domain.Entities;
+using PersonDirectory.Domain.Enums;
+
+namespace PersonDirectory.Application.Commands
+{
+    public class BasePersonCommand : IRequest
+    {
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public Gender Gender { get; set; }
+
+        public string PersonalNumber { get; set; }
+
+        public DateTime BirthDate { get; set; }
+
+        public int CityId { get; set; }
+
+        public ICollection<PhoneNumber> PhoneNumbers { get; set; }
+    }
+
+    public class AddPersonCommand : BasePersonCommand;
+
+    public class UpdatePersonCommand : BasePersonCommand
+    {
+        public int Id { get; set; }
+    }
+
+    public class DeletePersonCommand : IRequest
+    {
+        public int Id { get; set; }
+    }
+}
