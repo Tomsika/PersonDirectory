@@ -18,9 +18,11 @@ namespace PersonDirectory.Domain.Entities
 
         public int CityId { get; set; }
 
-        public ICollection<PhoneNumber> PhoneNumbers { get; set; }
+        public City City { get; set; }
 
         public string ImageUrl { get; set; }
+
+        public ICollection<PhoneNumber> PhoneNumbers { get; set; }
 
         public ICollection<PersonRelation> Relations { get; set; }
     }

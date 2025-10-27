@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PersonDirectory.Application\PersonDirectory.Application.csproj" />
+    <ProjectReference Include="..\PersonDirectory.Infrastructure\PersonDirectory.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
