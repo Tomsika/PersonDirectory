@@ -17,6 +17,8 @@ namespace PersonDirectory.API.Models
 
         public int CityId { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public ICollection<AddPersonPhoneNumberModel> PhoneNumbers { get; set; }
     }
     public class AddPersonModel : BasePersonModel

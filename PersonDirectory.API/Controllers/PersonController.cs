@@ -16,9 +16,11 @@ namespace PersonDirectory.API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private readonly IWebHostEnvironment _env;
 
-        public PersonController(IMapper mapper, IMediator mediator)
+        public PersonController(IMapper mapper, IMediator mediator, IWebHostEnvironment env)
         {
+            _env = env;
             _mapper = mapper;
             _mediator = mediator;
         }
@@ -57,6 +59,27 @@ namespace PersonDirectory.API.Controllers
             return Ok();
         }
 
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadImage([FromForm] string id, IFormFile imageFile)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+                return BadRequest("Image file is required");
+
+            var uploadFolder = Path.Combine(_env.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadFolder))
+                Directory.CreateDirectory(uploadFolder);
+
+            var fileName = $"person_{id}{Path.GetExtension(imageFile.FileName)}";
+            var filePath = Path.Combine(uploadFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+                await imageFile.CopyToAsync(stream);
+
+            var imageUrl = $"/uploads/{fileName}";
+
+            return Ok(new { imageUrl });
+        }
+
         [HttpDelete("deleteRelation")]
         public async Task<IActionResult> DeleteRelation([FromBody] DeletePersonRelationModel model, CancellationToken cancellationToken)
         {
@@ -64,6 +87,7 @@ namespace PersonDirectory.API.Controllers
             await _mediator.Send(command, cancellationToken);
             return Ok();
         }
+
         #endregion
 
         #region Query

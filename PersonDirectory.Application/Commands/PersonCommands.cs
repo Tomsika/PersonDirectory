@@ -18,6 +18,8 @@ namespace PersonDirectory.Application.Commands
 
         public int CityId { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public ICollection<PhoneNumber> PhoneNumbers { get; set; }
     }
 
@@ -41,6 +43,8 @@ namespace PersonDirectory.Application.Commands
 
         public int RelatedPersonId { get; set; }
     }
+
+
 
     public class DeletePersonRelationCommand : IRequest
     {

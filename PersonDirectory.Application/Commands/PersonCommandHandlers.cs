@@ -38,6 +38,7 @@ namespace PersonDirectory.Application.Commands
                 command.PersonalNumber,
                 command.BirthDate,
                 command.CityId,
+                command.ImageUrl,
                 command.PhoneNumbers);
 
             await _personWriteRepository.Add(person, cancellationToken);
@@ -60,6 +61,7 @@ namespace PersonDirectory.Application.Commands
                 command.PersonalNumber,
                 command.BirthDate,
                 command.CityId,
+                command.ImageUrl,
                 command.PhoneNumbers);
 
             await _unitOfWork.SaveChangesAsync();

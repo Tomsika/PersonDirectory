@@ -40,6 +40,7 @@ namespace PersonDirectory.Domain.Entities
            string personalNumber,
            DateTime birthDate,
            int cityId,
+           string imageUrl,
            ICollection<PhoneNumber> phoneNumbers
            )
         {
@@ -49,6 +50,7 @@ namespace PersonDirectory.Domain.Entities
             PersonalNumber = personalNumber;
             BirthDate = birthDate;
             CityId = cityId;
+            ImageUrl = imageUrl;
             PhoneNumbers = phoneNumbers;
             Status = PersonStatus.Active;
         }
@@ -60,8 +62,9 @@ namespace PersonDirectory.Domain.Entities
             string personalNumber,
             DateTime birthDate,
             int cityId,
+            string imageUrl,
             ICollection<PhoneNumber> phoneNumbers)
-            => new Person(firstName, lastName, gender, personalNumber, birthDate, cityId, phoneNumbers);
+            => new Person(firstName, lastName, gender, personalNumber, birthDate, cityId, imageUrl, phoneNumbers);
 
         public void Update(
             string firstName,
@@ -70,6 +73,7 @@ namespace PersonDirectory.Domain.Entities
             string personalNumber,
             DateTime birthDate,
             int cityId,
+            string imageUrl,
             ICollection<PhoneNumber> phoneNumbers)
         {
             FirstName = firstName;
@@ -78,6 +82,7 @@ namespace PersonDirectory.Domain.Entities
             PersonalNumber = personalNumber;
             BirthDate = birthDate;
             CityId = cityId;
+            ImageUrl = imageUrl;
             PhoneNumbers = phoneNumbers;
         }
 
