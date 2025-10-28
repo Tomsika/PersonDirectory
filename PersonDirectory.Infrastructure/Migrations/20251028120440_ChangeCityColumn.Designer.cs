@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PersonDirectory.Infrastructure.Data;
@@ -11,9 +12,11 @@ using PersonDirectory.Infrastructure.Data;
 namespace PersonDirectory.Infrastructure.Migrations
 {
     [DbContext(typeof(PersonDirectoryDbContext))]
-    partial class PersonDirectoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251028120440_ChangeCityColumn")]
+    partial class ChangeCityColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

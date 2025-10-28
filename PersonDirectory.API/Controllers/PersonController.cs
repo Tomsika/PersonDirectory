@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PersonDirectory.API.FilterModels;
 using PersonDirectory.API.Models;
 using PersonDirectory.Application.Commands;
+using PersonDirectory.Application.Dtos;
+using PersonDirectory.Application.Queries;
+using System.ComponentModel.DataAnnotations;
 
 namespace PersonDirectory.API.Controllers
 {
@@ -18,6 +22,8 @@ namespace PersonDirectory.API.Controllers
             _mapper = mapper;
             _mediator = mediator;
         }
+
+        #region Command
 
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] AddPersonModel model, CancellationToken cancellationToken)
@@ -57,6 +63,38 @@ namespace PersonDirectory.API.Controllers
             var command = _mapper.Map<DeletePersonRelationCommand>(model);
             await _mediator.Send(command, cancellationToken);
             return Ok();
-        }    
+        }
+        #endregion
+
+        #region Query
+
+        [HttpGet("get")]
+        [ProducesResponseType(typeof(PersonDto), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PersonDto>> Get([FromQuery][Required] int id, CancellationToken cancellationToken)
+        {
+            var query = new GetByIdQuery { Id = id };
+            var personDto = await _mediator.Send(query, cancellationToken);
+            return Ok(personDto);
+        }
+
+        [HttpGet("getAll")]
+        [ProducesResponseType(typeof(PersonListItemDtoWithTotalCount), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PersonListItemDtoWithTotalCount>> GetAll([FromQuery] PersonFilterModel filterModel, CancellationToken cancellationToken)
+        {
+            var query = _mapper.Map<GetAllQuery>(filterModel);
+            var personListItemDtoWithTotalCount = await _mediator.Send(query, cancellationToken);
+            return Ok(personListItemDtoWithTotalCount);
+        }
+
+        [HttpGet("report")]
+        [ProducesResponseType(typeof(List<RelatedPersonsReportDto>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<RelatedPersonsReportDto>>> GetRelationsReport(CancellationToken cancellationToken)
+        {
+            var query = new GetRelationsReportQuery();
+            var report = await _mediator.Send(query, cancellationToken);
+            return Ok(report);
+        }
+
+        #endregion
     }
 }

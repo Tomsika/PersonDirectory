@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PersonDirectory.Application.Dtos;
 using PersonDirectory.Domain.Entities;
 
 namespace PersonDirectory.Infrastructure.Data
@@ -11,6 +12,8 @@ namespace PersonDirectory.Infrastructure.Data
         }
 
         public DbSet<Person> Persons { get; set; }
+
+        public DbSet<PersonDto> PersonDto { get; set; }
 
         public DbSet<City> Cities { get; set; }
 

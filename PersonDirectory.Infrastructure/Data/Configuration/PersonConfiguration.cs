@@ -38,8 +38,8 @@ namespace PersonDirectory.Infrastructure.Data.Configuration
                 .HasMaxLength(500);
 
             builder.HasOne(p => p.City)
-                .WithOne()
-                .HasForeignKey<Person>(p => p.CityId)
+                .WithMany()
+                .HasForeignKey(p => p.CityId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(p => p.PhoneNumbers)
