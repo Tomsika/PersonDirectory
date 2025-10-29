@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PersonDirectory.Application.Dtos;
 using PersonDirectory.Domain.Entities;
 
 namespace PersonDirectory.Infrastructure.Data
@@ -23,7 +22,7 @@ namespace PersonDirectory.Infrastructure.Data
         {
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PersonDirectoryDbContext).Assembly);
-           
+
             base.OnModelCreating(modelBuilder);
         }
     }

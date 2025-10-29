@@ -13,8 +13,7 @@ namespace PersonDirectory.Application.Queries
     {
         private readonly IPersonReadRepository _personReadRepository;
 
-        public PersonQueryHandlers(
-            IPersonReadRepository personReadRepository)
+        public PersonQueryHandlers(IPersonReadRepository personReadRepository)
         {
             _personReadRepository = personReadRepository;
         }

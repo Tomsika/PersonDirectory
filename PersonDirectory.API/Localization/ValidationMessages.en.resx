@@ -189,7 +189,7 @@
   <data name="ValidationError" xml:space="preserve">
     <value>Validation error occurred.</value>
   </data>
-  <data name="AlreadyExsists" xml:space="preserve">
+  <data name="AlreadyExists" xml:space="preserve">
     <value>{0} Record Already Exsists</value>
   </data>
   <data name="PersonNotFound" xml:space="preserve">
@@ -206,5 +206,8 @@
   </data>
   <data name="PersonRelationNotFound" xml:space="preserve">
     <value>Person relation with Id {0} was not found.</value>
+  </data>
+  <data name="RelationAlreadyExists" xml:space="preserve">
+    <value>Relation already exists</value>
   </data>
 </root>

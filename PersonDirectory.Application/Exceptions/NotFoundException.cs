@@ -2,13 +2,11 @@
 {
     public class NotFoundException : Exception
     {
-        public string ValidationKey { get; }
+        public int Key { get; }
 
-        public object Key { get; }
-
-        public NotFoundException(string validationKey, object key)
+        public NotFoundException(string message, int key)
+            : base(message)
         {
-            ValidationKey = validationKey;
             Key = key;
         }
     }

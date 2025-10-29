@@ -22,8 +22,8 @@ namespace PersonDirectory.Application.Commands
             IPersonWriteRepository personWriteRepository)
         {
             _unitOfWork = unitOfWork;
-            _personWriteRepository = personWriteRepository;
             _personReadRepository = personReadRepository;
+            _personWriteRepository = personWriteRepository;
         }
 
         public async Task Handle(AddPersonCommand command, CancellationToken cancellationToken)
@@ -31,7 +31,7 @@ namespace PersonDirectory.Application.Commands
             var exsists = await _personReadRepository.PersonalNumberExists(command.PersonalNumber, null, cancellationToken);
 
             if (exsists)
-                throw new AlreadyExsistExeption(command.PersonalNumber);
+                throw new AlreadyExsistExeption(command.PersonalNumber, "AlreadyExists");
 
             var person = Person.Create(
                 command.FirstName,
@@ -54,7 +54,7 @@ namespace PersonDirectory.Application.Commands
                  ?? throw new NotFoundException("PersonNotFound", command.Id);
 
             if (await _personReadRepository.PersonalNumberExists(command.PersonalNumber, command.Id, cancellationToken))
-                throw new AlreadyExsistExeption(command.PersonalNumber);
+                throw new AlreadyExsistExeption(command.PersonalNumber, "AlreadyExists");
 
             person.Update(
                 command.FirstName,
@@ -90,7 +90,7 @@ namespace PersonDirectory.Application.Commands
             var exists = await _personReadRepository.RelationExists(command.PersonId, command.RelatedPersonId, cancellationToken);
 
             if (exists)
-                throw new AlreadyExsistExeption("კავშირის");
+                throw new AlreadyExsistExeption(null, "RelationAlreadyExists");
 
             person.AddRelation(command.RelatedPersonId, command.RelationType);
 

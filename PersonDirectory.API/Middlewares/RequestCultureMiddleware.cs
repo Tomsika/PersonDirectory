@@ -1,51 +1,32 @@
 ﻿using System.Globalization;
 
-public class RequestCultureMiddleware
+namespace PersonDirectory.API.Middlewares
 {
-    private readonly RequestDelegate _next;
-
-    public RequestCultureMiddleware(RequestDelegate next)
+    public class RequestCultureMiddleware
     {
-        _next = next;
-    }
+        private readonly RequestDelegate _next;
+        private readonly string[] supportedLanguages = new[] { "ka", "en" };
+        private readonly CultureInfo defaultCulture = new CultureInfo("ka");
 
-    public async Task InvokeAsync(HttpContext context)
-    {
-        var acceptLanguage = context.Request.Headers["Accept-Language"].FirstOrDefault();
-
-        var supportedLanguages = new[] { "ka", "en" };
-        var defaultCulture = new CultureInfo("ka");
-
-        CultureInfo selectedCulture = defaultCulture;
-
-        if (!string.IsNullOrEmpty(acceptLanguage))
+        public RequestCultureMiddleware(RequestDelegate next)
         {
-            var languages = acceptLanguage.Split(',')
-                .Select(l => l.Split(';').FirstOrDefault()?.Trim())
-                .Where(l => !string.IsNullOrEmpty(l));
-
-            foreach (var lang in languages)
-            {
-                try
-                {
-                    var culture = new CultureInfo(lang);
-                    if (supportedLanguages.Contains(culture.TwoLetterISOLanguageName))
-                    {
-                        selectedCulture = culture;
-                        break;
-                    }
-                }
-                catch (CultureNotFoundException)
-                {
-                    continue;
-                }
-            }
+            _next = next;
         }
 
-        CultureInfo.CurrentCulture = selectedCulture;
-        CultureInfo.CurrentUICulture = selectedCulture;
-        context.Items["Culture"] = selectedCulture.Name;
+        public async Task InvokeAsync(HttpContext context)
+        {
+            var acceptLanguage = context.Request.Headers["Accept-Language"].FirstOrDefault();
 
-        await _next(context);
+            var selectedCulture = defaultCulture;
+
+            if (!string.IsNullOrEmpty(acceptLanguage) && supportedLanguages.Contains(acceptLanguage))
+                selectedCulture = new CultureInfo(acceptLanguage);
+
+            CultureInfo.CurrentCulture = selectedCulture;
+            CultureInfo.CurrentUICulture = selectedCulture;
+            context.Items["Culture"] = selectedCulture.Name;
+
+            await _next(context);
+        }
     }
 }

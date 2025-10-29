@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Localization;
+using PersonDirectory.API.ActionFilters;
 using PersonDirectory.API.MappingProfile;
+using PersonDirectory.API.Middlewares;
 using PersonDirectory.API.Validations;
 using PersonDirectory.Infrastructure;
 using System.Reflection;
@@ -28,8 +30,6 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(Assembly.Load("PersonDirectory.Application"));
 });
 
-
-
 builder.Services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
 builder.Services.AddSingleton(typeof(IStringLocalizer<>), typeof(StringLocalizer<>));
 
@@ -46,10 +46,6 @@ if (app.Environment.IsDevelopment())
 
     app.UseMiddleware<RequestCultureMiddleware>();
     app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-    app.UseHttpsRedirection();
-
-    app.UseAuthorization();
 
     app.MapControllers();
 

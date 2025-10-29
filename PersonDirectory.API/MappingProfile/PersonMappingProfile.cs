@@ -11,8 +11,7 @@ namespace PersonDirectory.API.MappingProfile
     {
         public PersonMappingProfile()
         {
-            CreateMap<AddPersonModel, AddPersonCommand>()
-            .ForMember(dest => dest.PhoneNumbers, opt => opt.MapFrom(src => src.PhoneNumbers));
+            CreateMap<AddPersonModel, AddPersonCommand>();
 
             CreateMap<AddPersonPhoneNumberModel, PhoneNumber>();
             CreateMap<UpdatePersonModel, UpdatePersonCommand>();

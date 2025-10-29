@@ -2,11 +2,9 @@
 {
     public class BadRequestExeption : Exception
     {
-        public object ReasonKey { get; }
-
-        public BadRequestExeption(object reasoneKey)
+        public BadRequestExeption(string message)
+            : base(message)
         {
-            ReasonKey = reasoneKey;
         }
     }
 }

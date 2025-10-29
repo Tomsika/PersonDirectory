@@ -1,5 +1,4 @@
 ﻿using PersonDirectory.Domain.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace PersonDirectory.API.Models
 {
@@ -21,9 +20,7 @@ namespace PersonDirectory.API.Models
 
         public ICollection<AddPersonPhoneNumberModel> PhoneNumbers { get; set; }
     }
-    public class AddPersonModel : BasePersonModel
-    {
-    }
+    public class AddPersonModel : BasePersonModel;
 
     public class UpdatePersonModel : BasePersonModel
     {

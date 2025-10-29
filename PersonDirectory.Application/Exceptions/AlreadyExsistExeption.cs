@@ -2,9 +2,10 @@
 {
     public class AlreadyExsistExeption : Exception
     {
-        public object Key { get; }
+        public string Key { get; }
 
-        public AlreadyExsistExeption(object key)
+        public AlreadyExsistExeption(string key, string message)
+            : base(message)
         {
             Key = key;
         }

@@ -44,8 +44,6 @@ namespace PersonDirectory.Application.Commands
         public int RelatedPersonId { get; set; }
     }
 
-
-
     public class DeletePersonRelationCommand : IRequest
     {
         public int PersonId { get; set; }
