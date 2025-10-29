@@ -51,5 +51,5 @@ namespace PersonDirectory.Application.Commands
         public int PersonId { get; set; }
 
         public int Id { get; set; }
-    }
+    } 
 }

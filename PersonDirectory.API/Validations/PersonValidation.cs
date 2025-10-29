@@ -1,5 +1,7 @@
-﻿using PersonDirectory.API.Models;
-using FluentValidation;
+﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
+using PersonDirectory.API.Localization;
+using PersonDirectory.API.Models;
 using System.Text.RegularExpressions;
 
 namespace PersonDirectory.API.Validations
@@ -16,29 +18,29 @@ namespace PersonDirectory.API.Validations
         private static readonly Regex DigitsOnly =
         new(@"^\d{11}$", RegexOptions.Compiled);
 
-        public BasePersonValidator()
+        public BasePersonValidator(IStringLocalizer<ValidationMessages> localizer)
         {
             RuleFor(x => x.FirstName)
-                .NotEmpty().WithMessage("სახელი სავალდებულოა.")
-                .Length(2, 50).WithMessage("სახელი უნდა იყოს 2-დან 50 სიმბოლომდე.")
+                .NotEmpty().WithMessage(localizer["FirstNameRequired"])
+                .Length(2, 50).WithMessage(localizer["FirstNameLength"])
                 .Must(BeLatinOrGeorgianOnly)
-                    .WithMessage("სახელი უნდა შედგებოდეს მხოლოდ ქართული ან მხოლოდ ლათინური ასოებისგან.");
+                    .WithMessage(localizer["FirstNameAlphabet"]);
 
             RuleFor(x => x.LastName)
-                .NotEmpty().WithMessage("გვარი სავალდებულოა.")
-                .Length(2, 50).WithMessage("გვარი უნდა იყოს 2-დან 50 სიმბოლომდე.")
+                .NotEmpty().WithMessage(localizer["LastNameRequired"])
+                .Length(2, 50).WithMessage(localizer["LastNameLength"])
                 .Must(BeLatinOrGeorgianOnly)
-                    .WithMessage("გვარი უნდა შედგებოდეს მხოლოდ ქართული ან მხოლოდ ლათინური ასოებისგან.");
+                    .WithMessage(localizer["LastNameAlphabet"]);
 
             RuleFor(x => x.PersonalNumber)
-            .NotEmpty().WithMessage("პირადი ნომერი სავალდებულოა.")
+            .NotEmpty().WithMessage(localizer["PersonalNumberRequired"])
             .Matches(DigitsOnly)
-             .WithMessage("პირადი ნომერი უნდა შედგებოდეს ზუსტად 11 ციფრისგან.");
+             .WithMessage(localizer["PersonalNumberDigits"]);
 
             RuleFor(x => x.BirthDate)
-                .NotEmpty().WithMessage("დაბადების თარიღი სავალდებულოა")
+                .NotEmpty().WithMessage(localizer["BirthDateRequired"])
                 .Must(BeAtLeast18YearsOld)
-                .WithMessage("მომხმარებელი უნდა იყოს მინიმუმ 18 წლის.");
+                .WithMessage(localizer["BirthDateMinAge"]);
         }
 
         private static bool BeLatinOrGeorgianOnly(string value)
@@ -55,10 +57,20 @@ namespace PersonDirectory.API.Validations
 
     public class AddPersonValidation : BasePersonValidator<AddPersonModel>
     {
-
+        public AddPersonValidation(IStringLocalizer<ValidationMessages> localizer)
+            : base(localizer)
+        {
+            
+        }
     }
 
     public class UpdatePersonValidation : BasePersonValidator<UpdatePersonModel>
     {
+        public UpdatePersonValidation(IStringLocalizer<ValidationMessages> localizer)
+            : base(localizer)
+        {
+            RuleFor(x => x.Id)
+                .NotEmpty().WithMessage(localizer["IdRequired"]);
+        }
     }
 }

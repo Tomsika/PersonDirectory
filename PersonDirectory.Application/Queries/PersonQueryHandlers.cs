@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PersonDirectory.Application.Dtos;
+using PersonDirectory.Application.Exceptions;
 using PersonDirectory.Domain.Entities;
 using PersonDirectory.Domain.Interfaces;
 
@@ -20,7 +21,7 @@ namespace PersonDirectory.Application.Queries
         public async Task<PersonDto> Handle(GetByIdQuery query, CancellationToken cancellationToken)
         {
             var person = await _personReadRepository.GetById(query.Id, cancellationToken)
-              ?? throw new KeyNotFoundException($"Person with id {query.Id} not found");
+              ?? throw new NotFoundException(query.Id);
 
             var personDto = MapToDto(person, cancellationToken);
             return personDto;

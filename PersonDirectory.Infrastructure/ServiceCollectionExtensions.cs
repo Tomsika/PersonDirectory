@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PersonDirectory.Domain.Interfaces;
 using PersonDirectory.Infrastructure.Data;
+using PersonDirectory.Infrastructure.Repositories;
+using PersonDirectory.Infrastructure.UnitOfWorks;
 
 namespace PersonDirectory.Infrastructure
 {
@@ -13,7 +16,10 @@ namespace PersonDirectory.Infrastructure
                 options.UseNpgsql(
                     configuration.GetConnectionString("PersonDirectoryConnection")));
 
-            // Add other infrastructure services here
+            services.AddScoped<IPersonWriteRepository, PersonWriteRepository>();
+            services.AddScoped<IPersonReadRepository, PersonReadRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             return services;
         }
     }

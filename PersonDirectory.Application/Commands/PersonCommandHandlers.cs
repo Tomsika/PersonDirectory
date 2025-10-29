@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PersonDirectory.Application.Exceptions;
 using PersonDirectory.Domain.Entities;
 using PersonDirectory.Domain.Interfaces;
 
@@ -14,6 +15,7 @@ namespace PersonDirectory.Application.Commands
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPersonReadRepository _personReadRepository;
         private readonly IPersonWriteRepository _personWriteRepository;
+
         public PersonCommandHandlers(
             IUnitOfWork unitOfWork,
             IPersonReadRepository personReadRepository,
@@ -26,10 +28,10 @@ namespace PersonDirectory.Application.Commands
 
         public async Task Handle(AddPersonCommand command, CancellationToken cancellationToken)
         {
-            if (await _personReadRepository.PersonalNumberExists(command.PersonalNumber, null, cancellationToken))
-            {
-                throw new InvalidOperationException("პირადი ნომერი უკვე არსებობს");
-            }
+            var exsists = await _personReadRepository.PersonalNumberExists(command.PersonalNumber, null, cancellationToken);
+
+            if (exsists)
+                throw new AlreadyExsistExeption();
 
             var person = Person.Create(
                 command.FirstName,
@@ -49,10 +51,10 @@ namespace PersonDirectory.Application.Commands
         public async Task Handle(UpdatePersonCommand command, CancellationToken cancellationToken)
         {
             var person = await _personReadRepository.GetById(command.Id, cancellationToken)
-                ?? throw new KeyNotFoundException($"Person with id {command.Id} not found");
+                 ?? throw new NotFoundException(command.Id);
 
             if (await _personReadRepository.PersonalNumberExists(command.PersonalNumber, command.Id, cancellationToken))
-                throw new InvalidOperationException("PersonalNumber already exists");
+                throw new AlreadyExsistExeption();
 
             person.Update(
                 command.FirstName,
@@ -70,7 +72,7 @@ namespace PersonDirectory.Application.Commands
         public async Task Handle(DeletePersonCommand command, CancellationToken cancellationToken)
         {
             var person = await _personReadRepository.GetById(command.Id, cancellationToken)
-            ?? throw new KeyNotFoundException($"Person with id {command.Id} not found");
+                 ?? throw new NotFoundException(command.Id);
 
             person.Delete();
 
@@ -80,18 +82,15 @@ namespace PersonDirectory.Application.Commands
         public async Task Handle(AddPersonRelationCommand command, CancellationToken cancellationToken)
         {
             var person = await _personReadRepository.GetById(command.PersonId, cancellationToken)
-             ?? throw new KeyNotFoundException($"Person with id {command.PersonId} not found");
+                 ?? throw new NotFoundException(command.PersonId);
 
             var relatedPerson = await _personReadRepository.GetById(command.RelatedPersonId, cancellationToken)
-             ?? throw new KeyNotFoundException($"Related person with id {command.RelatedPersonId} not found");
+                 ?? throw new NotFoundException(command.RelatedPersonId);
 
-            // Check if relation already exists
             var exists = await _personReadRepository.RelationExists(command.PersonId, command.RelatedPersonId, cancellationToken);
 
             if (exists)
-            {
-                throw new InvalidOperationException("Relation already exists");
-            }
+                throw new AlreadyExsistExeption();
 
             person.AddRelation(command.RelatedPersonId, command.RelationType);
 
@@ -100,7 +99,9 @@ namespace PersonDirectory.Application.Commands
 
         public async Task Handle(DeletePersonRelationCommand command, CancellationToken cancellationToken)
         {
-            var person = await _personReadRepository.GetById(command.PersonId, cancellationToken);
+            var person = await _personReadRepository.GetById(command.PersonId, cancellationToken)
+                 ?? throw new NotFoundException(command.PersonId);
+
             var personRealtion = person.Relations.First(x => x.Id == command.Id);
 
             person.DeleteRelation(personRealtion);

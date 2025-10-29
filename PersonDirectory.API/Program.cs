@@ -1,9 +1,9 @@
+﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.Localization;
 using PersonDirectory.API.MappingProfile;
-using PersonDirectory.Domain.Interfaces;
+using PersonDirectory.API.Validations;
 using PersonDirectory.Infrastructure;
-using PersonDirectory.Infrastructure.Repositories;
-using PersonDirectory.Infrastructure.UnitOfWorks;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,9 +12,16 @@ builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<PersonMappingProfile>();
 });
+
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddControllers();
+
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<FluentValidationFilter>();
+});
+
+builder.Services.AddLocalization();
 
 builder.Services.AddMediatR(cfg =>
 {
@@ -22,22 +29,23 @@ builder.Services.AddMediatR(cfg =>
 });
 
 
-builder.Services.AddScoped<IPersonWriteRepository, PersonWriteRepository>();
-builder.Services.AddScoped<IPersonReadRepository, PersonReadRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
+builder.Services.AddSingleton(typeof(IStringLocalizer<>), typeof(StringLocalizer<>));
+
 builder.Services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<AddPersonValidation>();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "PersonDirectory API V1");
-        c.RoutePrefix = "swagger";
-    });
+    app.UseSwaggerUI();
+
+    app.UseMiddleware<RequestCultureMiddleware>();
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
 
     app.UseHttpsRedirection();
 
