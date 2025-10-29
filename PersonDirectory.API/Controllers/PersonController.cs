@@ -5,6 +5,7 @@ using PersonDirectory.API.FilterModels;
 using PersonDirectory.API.Models;
 using PersonDirectory.Application.Commands;
 using PersonDirectory.Application.Dtos;
+using PersonDirectory.Application.Exceptions;
 using PersonDirectory.Application.Queries;
 using System.ComponentModel.DataAnnotations;
 
@@ -18,7 +19,10 @@ namespace PersonDirectory.API.Controllers
         private readonly IMediator _mediator;
         private readonly IWebHostEnvironment _env;
 
-        public PersonController(IMapper mapper, IMediator mediator, IWebHostEnvironment env)
+        public PersonController(
+            IMapper mapper,
+            IMediator mediator,
+            IWebHostEnvironment env)
         {
             _env = env;
             _mapper = mapper;
@@ -28,7 +32,7 @@ namespace PersonDirectory.API.Controllers
         #region Command
 
         [HttpPost("add")]
-        public async Task<IActionResult> Add([FromBody] AddPersonModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Add(AddPersonModel model, CancellationToken cancellationToken)
         {
             var command = _mapper.Map<AddPersonCommand>(model);
             await _mediator.Send(command);
@@ -36,7 +40,7 @@ namespace PersonDirectory.API.Controllers
         }
 
         [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody] UpdatePersonModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Update(UpdatePersonModel model, CancellationToken cancellationToken)
         {
             var command = _mapper.Map<UpdatePersonCommand>(model);
             await _mediator.Send(command, cancellationToken);
@@ -44,7 +48,7 @@ namespace PersonDirectory.API.Controllers
         }
 
         [HttpPost("delete")]
-        public async Task<IActionResult> Update([FromBody] DeletePersonModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Update(DeletePersonModel model, CancellationToken cancellationToken)
         {
             var command = _mapper.Map<DeletePersonCommand>(model);
             await _mediator.Send(command, cancellationToken);
@@ -52,7 +56,7 @@ namespace PersonDirectory.API.Controllers
         }
 
         [HttpPost("AddRelation")]
-        public async Task<IActionResult> AddRelation([FromBody] AddPersonRelationModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddRelation(AddPersonRelationModel model, CancellationToken cancellationToken)
         {
             var command = _mapper.Map<AddPersonRelationCommand>(model);
             await _mediator.Send(command, cancellationToken);
@@ -60,10 +64,10 @@ namespace PersonDirectory.API.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadImage([FromForm] string id, IFormFile imageFile)
+        public async Task<IActionResult> UploadImage([FromForm][Required] int id, [Required] IFormFile imageFile)
         {
             if (imageFile == null || imageFile.Length == 0)
-                return BadRequest("Image file is required");
+                throw new BadRequestExeption("ImageFileRequired");
 
             var uploadFolder = Path.Combine(_env.WebRootPath, "uploads");
             if (!Directory.Exists(uploadFolder))
@@ -81,7 +85,7 @@ namespace PersonDirectory.API.Controllers
         }
 
         [HttpDelete("deleteRelation")]
-        public async Task<IActionResult> DeleteRelation([FromBody] DeletePersonRelationModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteRelation(DeletePersonRelationModel model, CancellationToken cancellationToken)
         {
             var command = _mapper.Map<DeletePersonRelationCommand>(model);
             await _mediator.Send(command, cancellationToken);

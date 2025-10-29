@@ -74,6 +74,7 @@
 
         public string RelationType { get; set; }
     }
+
     public class RelatedPersonsReportDto
     {
         public int PersonId { get; set; }

@@ -168,17 +168,14 @@
   <data name="GenderInvalid" xml:space="preserve">
     <value>სქესი უნდა იყოს 'ქალი' ან 'კაცი'</value>
   </data>
-  <data name="PhoneNumberMinLength" xml:space="preserve">
-    <value>ტელეფონის ნომერი უნდა შეიცავდეს მინიმუმ 4 სიმბოლოს</value>
+  <data name="PhoneNumberLength" xml:space="preserve">
+    <value>ტელეფონის ნომერი უნდა იყოს 4-დან 50 სიმბოლომდე</value>
   </data>
-  <data name="PhoneNumberMaxLength" xml:space="preserve">
-    <value>ტელეფონის ნომერი არ უნდა აღემატებოდეს 50 სიმბოლოს</value>
-  </data>
-  <data name="PhoneNumberTypeRequired" xml:space="preserve">
-    <value>ტელეფონის ნომრის ტიპი აუცილებელია</value>
+  <data name="PhoneTypeRequired" xml:space="preserve">
+    <value>გთხოვთ მიუთითოთ სწორი ტელეფონის ტიპი</value>
   </data>
   <data name="RelationshipTypeRequired" xml:space="preserve">
-    <value>კავშირის ტიპი აუცილებელია</value>
+    <value>გთხოვთ მიუთითოთ სწორი ურთიერთობის ტიპი</value>
   </data>
   <data name="RelatedPersonIdRequired" xml:space="preserve">
     <value>დაკავშირებული პირის id აუცილებელია</value>
@@ -192,10 +189,22 @@
   <data name="ValidationError" xml:space="preserve">
     <value>დაფიქსირდა ვალიდაციის შეცდომა.</value>
   </data>
+  <data name="AlreadyExsists" xml:space="preserve">
+    <value>{0} ჩანაწერი უკვე არსებობს</value>
+  </data>
   <data name="PersonNotFound" xml:space="preserve">
     <value> ფიზიკური პირი იდენტიფიკატორით '{0}' ვერ მოიძებნა .</value>
   </data>
-  <data name="AlreadyExsists" xml:space="preserve">
-    <value>ჩანაწერი უკვე არსებობს</value>
+  <data name="PersonIdRequired" xml:space="preserve">
+    <value>ფიზიკური პირის Id სავალდებულოა</value>
+  </data>
+  <data name="ImageFileRequired" xml:space="preserve">
+    <value>გთხოვთ ატვირთოთ სურათი</value>
+  </data>
+  <data name="RelatedPersonNotFound" xml:space="preserve">
+    <value> დაკავშირებული პირი იდენტიფიკატორით '{0}' ვერ მოიძებნა .</value>
+  </data>
+  <data name="PersonRelationNotFound" xml:space="preserve">
+    <value>პიროვნების ურთიერთობა Id {0}-ით ვერ მოიძებნა.</value>
   </data>
 </root>

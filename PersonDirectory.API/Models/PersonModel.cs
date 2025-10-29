@@ -27,44 +27,34 @@ namespace PersonDirectory.API.Models
 
     public class UpdatePersonModel : BasePersonModel
     {
-        [Required]
-        public int? Id { get; set; }
+        public int Id { get; set; }
     }
 
     public class DeletePersonModel
     {
-        [Required]
-        public int? Id { get; set; }
+        public int Id { get; set; }
     }
 
     public class AddPersonRelationModel
     {
-        [Required]
-        public int? PersonId { get; set; }
+        public int PersonId { get; set; }
 
-        [Required]
         public RelationType RelationType { get; set; }
 
-        [Required]
-        public int? RelatedPersonId { get; set; }
+        public int RelatedPersonId { get; set; }
     }
 
     public class DeletePersonRelationModel
     {
-        [Required]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
-        [Required]
-        public int? PersonId { get; set; }
+        public int PersonId { get; set; }
     }
 
     public class AddPersonPhoneNumberModel
     {
-        [Required]
         public PhoneType Type { get; set; }
 
-        [Required]
-        [StringLength(50, MinimumLength = 4, ErrorMessage = "ნომერი უნდა იყოს 4-დან 50 სიმბოლომდე")]
         public string Number { get; set; }
     }
 }

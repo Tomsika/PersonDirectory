@@ -23,15 +23,15 @@ public class ExceptionHandlingMiddleware
         }
         catch (NotFoundException ex)
         {
-            await HandleExceptionAsync(context, StatusCodes.Status404NotFound, _localizer["PersonNotFound", ex.Key], ex);
+            await HandleExceptionAsync(context, StatusCodes.Status404NotFound, _localizer[$"{ex.ValidationKey}", ex.Key], ex);
         }
-        catch(AlreadyExsistExeption ex)
+        catch (AlreadyExsistExeption ex)
         {
-            await HandleExceptionAsync(context, StatusCodes.Status400BadRequest, _localizer["AlreadyExsists"], ex);
+            await HandleExceptionAsync(context, StatusCodes.Status400BadRequest, _localizer["AlreadyExsists", ex.Key], ex);
         }
-        catch (InvalidOperationException ex)
+        catch (BadRequestExeption ex)
         {
-            await HandleExceptionAsync(context, StatusCodes.Status400BadRequest, _localizer["ValidationError"], ex);
+            await HandleExceptionAsync(context, StatusCodes.Status400BadRequest, _localizer[$"{ex.ReasonKey}"], ex);
         }
         catch (Exception ex)
         {

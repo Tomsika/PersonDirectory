@@ -13,8 +13,6 @@ namespace PersonDirectory.Infrastructure.Data
 
         public DbSet<Person> Persons { get; set; }
 
-        public DbSet<PersonDto> PersonDto { get; set; }
-
         public DbSet<City> Cities { get; set; }
 
         public DbSet<PhoneNumber> PhoneNumbers { get; set; }

@@ -2,8 +2,11 @@
 {
     public class AlreadyExsistExeption : Exception
     {
-        public AlreadyExsistExeption()
+        public object Key { get; }
+
+        public AlreadyExsistExeption(object key)
         {
+            Key = key;
         }
     }
 }

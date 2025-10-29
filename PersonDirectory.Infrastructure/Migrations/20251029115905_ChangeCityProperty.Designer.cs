@@ -12,8 +12,8 @@ using PersonDirectory.Infrastructure.Data;
 namespace PersonDirectory.Infrastructure.Migrations
 {
     [DbContext(typeof(PersonDirectoryDbContext))]
-    [Migration("20251028120440_ChangeCityColumn")]
-    partial class ChangeCityColumn
+    [Migration("20251029115905_ChangeCityProperty")]
+    partial class ChangeCityProperty
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,97 +24,6 @@ namespace PersonDirectory.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("PersonDirectory.Application.Dtos.PersonDto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CityName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PersonalNumber")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PersonDto");
-                });
-
-            modelBuilder.Entity("PersonDirectory.Application.Dtos.PhoneNumberDto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Number")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("PersonDtoId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonDtoId");
-
-                    b.ToTable("PhoneNumberDto");
-                });
-
-            modelBuilder.Entity("PersonDirectory.Application.Dtos.RelatedPersonDto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("PersonDtoId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("RelatedPersonFirstName")
-                        .HasColumnType("text");
-
-                    b.Property<int>("RelatedPersonId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("RelatedPersonLastName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("RelationType")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonDtoId");
-
-                    b.ToTable("RelatedPersonDto");
-                });
 
             modelBuilder.Entity("PersonDirectory.Domain.Entities.City", b =>
                 {
@@ -281,20 +190,6 @@ namespace PersonDirectory.Infrastructure.Migrations
                     b.ToTable("PhoneNumbers", (string)null);
                 });
 
-            modelBuilder.Entity("PersonDirectory.Application.Dtos.PhoneNumberDto", b =>
-                {
-                    b.HasOne("PersonDirectory.Application.Dtos.PersonDto", null)
-                        .WithMany("PhoneNumbers")
-                        .HasForeignKey("PersonDtoId");
-                });
-
-            modelBuilder.Entity("PersonDirectory.Application.Dtos.RelatedPersonDto", b =>
-                {
-                    b.HasOne("PersonDirectory.Application.Dtos.PersonDto", null)
-                        .WithMany("RelatedPersons")
-                        .HasForeignKey("PersonDtoId");
-                });
-
             modelBuilder.Entity("PersonDirectory.Domain.Entities.Person", b =>
                 {
                     b.HasOne("PersonDirectory.Domain.Entities.City", "City")
@@ -334,13 +229,6 @@ namespace PersonDirectory.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("PersonDirectory.Application.Dtos.PersonDto", b =>
-                {
-                    b.Navigation("PhoneNumbers");
-
-                    b.Navigation("RelatedPersons");
                 });
 
             modelBuilder.Entity("PersonDirectory.Domain.Entities.Person", b =>

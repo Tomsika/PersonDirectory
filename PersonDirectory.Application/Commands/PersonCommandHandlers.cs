@@ -31,7 +31,7 @@ namespace PersonDirectory.Application.Commands
             var exsists = await _personReadRepository.PersonalNumberExists(command.PersonalNumber, null, cancellationToken);
 
             if (exsists)
-                throw new AlreadyExsistExeption();
+                throw new AlreadyExsistExeption(command.PersonalNumber);
 
             var person = Person.Create(
                 command.FirstName,
@@ -51,10 +51,10 @@ namespace PersonDirectory.Application.Commands
         public async Task Handle(UpdatePersonCommand command, CancellationToken cancellationToken)
         {
             var person = await _personReadRepository.GetById(command.Id, cancellationToken)
-                 ?? throw new NotFoundException(command.Id);
+                 ?? throw new NotFoundException("PersonNotFound", command.Id);
 
             if (await _personReadRepository.PersonalNumberExists(command.PersonalNumber, command.Id, cancellationToken))
-                throw new AlreadyExsistExeption();
+                throw new AlreadyExsistExeption(command.PersonalNumber);
 
             person.Update(
                 command.FirstName,
@@ -72,7 +72,7 @@ namespace PersonDirectory.Application.Commands
         public async Task Handle(DeletePersonCommand command, CancellationToken cancellationToken)
         {
             var person = await _personReadRepository.GetById(command.Id, cancellationToken)
-                 ?? throw new NotFoundException(command.Id);
+                 ?? throw new NotFoundException("PersonNotFound", command.Id);
 
             person.Delete();
 
@@ -82,15 +82,15 @@ namespace PersonDirectory.Application.Commands
         public async Task Handle(AddPersonRelationCommand command, CancellationToken cancellationToken)
         {
             var person = await _personReadRepository.GetById(command.PersonId, cancellationToken)
-                 ?? throw new NotFoundException(command.PersonId);
+                 ?? throw new NotFoundException("PersonNotFound", command.PersonId);
 
             var relatedPerson = await _personReadRepository.GetById(command.RelatedPersonId, cancellationToken)
-                 ?? throw new NotFoundException(command.RelatedPersonId);
+                 ?? throw new NotFoundException("RelatedPersonNotFound", command.RelatedPersonId);
 
             var exists = await _personReadRepository.RelationExists(command.PersonId, command.RelatedPersonId, cancellationToken);
 
             if (exists)
-                throw new AlreadyExsistExeption();
+                throw new AlreadyExsistExeption("კავშირის");
 
             person.AddRelation(command.RelatedPersonId, command.RelationType);
 
@@ -100,9 +100,10 @@ namespace PersonDirectory.Application.Commands
         public async Task Handle(DeletePersonRelationCommand command, CancellationToken cancellationToken)
         {
             var person = await _personReadRepository.GetById(command.PersonId, cancellationToken)
-                 ?? throw new NotFoundException(command.PersonId);
+                 ?? throw new NotFoundException("PersonNotFound", command.PersonId);
 
-            var personRealtion = person.Relations.First(x => x.Id == command.Id);
+            var personRealtion = person.Relations.FirstOrDefault(x => x.Id == command.Id)
+                ?? throw new NotFoundException("PersonRelationNotFound", command.Id);
 
             person.DeleteRelation(personRealtion);
 

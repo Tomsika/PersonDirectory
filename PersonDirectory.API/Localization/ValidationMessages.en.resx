@@ -168,17 +168,14 @@
   <data name="GenderInvalid" xml:space="preserve">
     <value>Gender must be either 'Female' or 'Male'</value>
   </data>
-  <data name="PhoneNumberMinLength" xml:space="preserve">
-    <value>Phone number must be at least 4 characters</value>
+  <data name="PhoneNumberLength" xml:space="preserve">
+    <value>Phone number must be between 4 and 50 characters</value>
   </data>
-  <data name="PhoneNumberMaxLength" xml:space="preserve">
-    <value>Phone number must not exceed 50 characters</value>
-  </data>
-  <data name="PhoneNumberTypeRequired" xml:space="preserve">
-    <value>Phone number type is required</value>
+  <data name="PhoneTypeRequired" xml:space="preserve">
+    <value>Please specify a valid phone type.</value>
   </data>
   <data name="RelationshipTypeRequired" xml:space="preserve">
-    <value>Relationship type is required</value>
+    <value>Please specify a valid relation type.</value>
   </data>
   <data name="RelatedPersonIdRequired" xml:space="preserve">
     <value>Related person id is required</value>
@@ -192,10 +189,22 @@
   <data name="ValidationError" xml:space="preserve">
     <value>Validation error occurred.</value>
   </data>
+  <data name="AlreadyExsists" xml:space="preserve">
+    <value>{0} Record Already Exsists</value>
+  </data>
   <data name="PersonNotFound" xml:space="preserve">
     <value>Person with key '{0}' was not found.</value>
   </data>
-  <data name="AlreadyExsists" xml:space="preserve">
-    <value>Record Already Exsists</value>
+  <data name="PersonIdRequired" xml:space="preserve">
+    <value>Person Id is reqiured</value>
+  </data>
+  <data name="ImageFileRequired" xml:space="preserve">
+    <value>Please upload an image file</value>
+  </data>
+  <data name="RelatedPersonNotFound" xml:space="preserve">
+    <value>RelatedPerson with key '{0}' was not found.</value>
+  </data>
+  <data name="PersonRelationNotFound" xml:space="preserve">
+    <value>Person relation with Id {0} was not found.</value>
   </data>
 </root>

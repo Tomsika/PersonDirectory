@@ -21,7 +21,7 @@ namespace PersonDirectory.Application.Queries
         public async Task<PersonDto> Handle(GetByIdQuery query, CancellationToken cancellationToken)
         {
             var person = await _personReadRepository.GetById(query.Id, cancellationToken)
-              ?? throw new NotFoundException(query.Id);
+              ?? throw new NotFoundException("PersonNotFound", query.Id);
 
             var personDto = MapToDto(person, cancellationToken);
             return personDto;

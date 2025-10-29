@@ -33,14 +33,22 @@ namespace PersonDirectory.API.Validations
                     .WithMessage(localizer["LastNameAlphabet"]);
 
             RuleFor(x => x.PersonalNumber)
-            .NotEmpty().WithMessage(localizer["PersonalNumberRequired"])
-            .Matches(DigitsOnly)
-             .WithMessage(localizer["PersonalNumberDigits"]);
+                .NotEmpty().WithMessage(localizer["PersonalNumberRequired"])
+                .Matches(DigitsOnly)
+                .WithMessage(localizer["PersonalNumberDigits"]);
 
             RuleFor(x => x.BirthDate)
                 .NotEmpty().WithMessage(localizer["BirthDateRequired"])
                 .Must(BeAtLeast18YearsOld)
                 .WithMessage(localizer["BirthDateMinAge"]);
+
+            RuleFor(x => x.Gender)
+                .NotEmpty().WithMessage(localizer["GenderRequired"])
+                .IsInEnum()
+                .WithMessage(localizer["GenderInvalid"]);
+
+            RuleForEach(x => x.PhoneNumbers)
+                .SetValidator(new AddPersonPhoneNumberValidation(localizer));
         }
 
         private static bool BeLatinOrGeorgianOnly(string value)
@@ -60,7 +68,7 @@ namespace PersonDirectory.API.Validations
         public AddPersonValidation(IStringLocalizer<ValidationMessages> localizer)
             : base(localizer)
         {
-            
+
         }
     }
 
@@ -71,6 +79,58 @@ namespace PersonDirectory.API.Validations
         {
             RuleFor(x => x.Id)
                 .NotEmpty().WithMessage(localizer["IdRequired"]);
+        }
+    }
+
+    public class DeletePersonValidation : AbstractValidator<DeletePersonModel>
+    {
+        public DeletePersonValidation(IStringLocalizer<ValidationMessages> localizer)
+        {
+            RuleFor(x => x.Id)
+                .NotEmpty().WithMessage(localizer["IdRequired"]);
+        }
+    }
+    public class AddPersonRelationValidation : AbstractValidator<AddPersonRelationModel>
+    {
+        public AddPersonRelationValidation(IStringLocalizer<ValidationMessages> localizer)
+        {
+            RuleFor(x => x.PersonId)
+                .NotEmpty().WithMessage(localizer["PersonIdRequired"])
+                .GreaterThan(0);
+
+            RuleFor(x => x.RelationType)
+                .NotEmpty()
+                .IsInEnum()
+                .WithMessage(localizer["RelationTypeRequired"]);
+
+            RuleFor(x => x.RelatedPersonId)
+                .NotEmpty().WithMessage(localizer["RelatedPersonIdRequired"])
+                .GreaterThan(0);
+        }
+    }
+
+    public class DeletePersonRelationValidation : AbstractValidator<DeletePersonRelationModel>
+    {
+        public DeletePersonRelationValidation(IStringLocalizer<ValidationMessages> localizer)
+        {
+            RuleFor(x => x.Id)
+                .NotEmpty().WithMessage(localizer["IdRequired"]);
+            RuleFor(x => x.PersonId)
+                .NotEmpty().WithMessage(localizer["PersonIdRequired"]);
+        }
+    }
+
+    public class AddPersonPhoneNumberValidation : AbstractValidator<AddPersonPhoneNumberModel>
+    {
+        public AddPersonPhoneNumberValidation(IStringLocalizer<ValidationMessages> localizer)
+        {
+            RuleFor(x => x.Type)
+                .NotEmpty()
+                .IsInEnum()
+                .WithMessage(localizer["PhoneTypeRequired"]);
+            RuleFor(x => x.Number)
+                .NotEmpty().WithMessage(localizer["PhoneNumberRequired"])
+                .Length(4, 50).WithMessage(localizer["PhoneNumberLength"]);
         }
     }
 }
